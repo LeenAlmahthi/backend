@@ -124,6 +124,42 @@ builder.Services.AddAuthorization();
     //- Two-factor authentication, where applicable.
 var app = builder.Build();
 
+
+var requestLogger = app.Services
+    .GetRequiredService<ILoggerFactory>()
+    .CreateLogger("RequestDiagnostics");
+
+app.Use(async (context, next) =>
+{
+    requestLogger.LogInformation(
+        "HTTP REQUEST: {Method} {Path}",
+        context.Request.Method,
+        context.Request.Path
+    );
+
+    try
+    {
+        await next();
+    }
+    catch (Exception ex)
+    {
+        requestLogger.LogError(
+            ex,
+            "HTTP REQUEST FAILED: {Method} {Path}",
+            context.Request.Method,
+            context.Request.Path
+        );
+
+        throw;
+    }
+
+    requestLogger.LogInformation(
+        "HTTP RESPONSE: {Method} {Path} returned {StatusCode}",
+        context.Request.Method,
+        context.Request.Path,
+        context.Response.StatusCode
+    );
+}); 
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler(exceptionApp =>
 {
