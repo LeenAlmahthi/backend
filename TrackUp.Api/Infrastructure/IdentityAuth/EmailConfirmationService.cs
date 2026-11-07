@@ -47,6 +47,11 @@ public class EmailConfirmationService(
         }
         catch
         {
+            _logger.LogError(
+            ex,
+            "Failed to send confirmation email to {Email}",
+            email
+            );
             await InvalidateConfirmationTokenAsync(user);
             return IdentityResult.Failed();
         }
