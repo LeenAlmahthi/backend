@@ -150,11 +150,10 @@ app.UseExceptionHandler(exceptionApp =>
     });
 });
 
-if (app.Environment.IsDevelopment())
-{
+// if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+
 
 app.UseHttpsRedirection();
 
