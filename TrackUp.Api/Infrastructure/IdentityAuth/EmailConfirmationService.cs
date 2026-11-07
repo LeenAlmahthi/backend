@@ -15,17 +15,17 @@ public class EmailConfirmationService(
     IResend resend,
     IConfiguration configuration,
     IWebHostEnvironment environment,
-    ILogger EmailConfirmationService logger) : IEmailService
+    ILogger<EmailConfirmationService> logger) : IEmailService
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly IResend _resend = resend;
     private readonly IConfiguration _configuration = configuration;
     private readonly IWebHostEnvironment _environment = environment;
-    private readonly ILogger EmailConfirmationService _logger = logger;
+    private readonly ILogger<EmailConfirmationService> _logger = logger;
 
     private const int TokenExpirationHours = 24;
 
-    public async Task IdentityResult SendConfirmationEmailAsync(string email)
+    public async Task <IdentityResult> SendConfirmationEmailAsync(string email)
     {
         _logger.LogInformation(
             "EMAIL STEP 1: Starting confirmation email process.");
